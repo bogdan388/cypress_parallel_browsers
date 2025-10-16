@@ -65,9 +65,11 @@ npm run demo
          └────────────────┘
 ```
 
-## Video Output
-Tests automatically record videos saved in `cypress/videos/`:
-- `dual-browsers-HD.mp4` - Both browsers side-by-side (if merged)
+## 📹 Demo Video
+
+**[▶️ Watch Demo Video - Two Browsers Running Simultaneously](https://github.com/bogdan388/cypress_parallel_browsers/blob/main/cypress/videos/dual-browsers-HD.mp4)**
+
+See two Cypress browsers testing real-time collaboration in parallel - Alice and Bob typing and seeing each other's messages instantly.
 
 ## Key Achievement
 **True parallel Cypress testing** - not session switching, not different test runs, but two actual Cypress instances running simultaneously, proving real-time features work under concurrent load.
