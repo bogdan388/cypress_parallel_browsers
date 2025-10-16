@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Text Sync</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="login-container" class="container">
+        <h2>Login</h2>
+        <div class="form-group">
+            <input type="text" id="username" placeholder="Username" autocomplete="username">
+            <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+            <button onclick="login()">Login</button>
+        </div>
+        <div id="login-error" class="error-message"></div>
+    </div>
+
+    <div id="app-container" class="container hidden">
+        <div class="header">
+            <h2>Real-time Text Collaboration</h2>
+            <div class="user-info">
+                <span id="user-display"></span>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div class="connected-users">
+            <h3>Connected Users:</h3>
+            <div id="users-list"></div>
+        </div>
+
+        <div class="text-area-container">
+            <textarea id="text-input" placeholder="Start typing... Changes sync automatically"></textarea>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket;
+        let currentUser = null;
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentUser = data;
+                    document.getElementById('login-container').classList.add('hidden');
+                    document.getElementById('app-container').classList.remove('hidden');
+                    document.getElementById('user-display').textContent = `Logged in as: ${data.displayName}`;
+                    initSocket();
+                } else {
+                    document.getElementById('login-error').textContent = 'Invalid username or password';
+                }
+            })
+            .catch(error => {
+                document.getElementById('login-error').textContent = 'Login failed';
+            });
+        }
+
+        function logout() {
+            if (socket) {
+                socket.disconnect();
+            }
+            currentUser = null;
+            document.getElementById('login-container').classList.remove('hidden');
+            document.getElementById('app-container').classList.add('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('login-error').textContent = '';
+            document.getElementById('text-input').value = '';
+        }
+
+        function initSocket() {
+            socket = io();
+
+            socket.on('connect', () => {
+                socket.emit('user-join', currentUser.displayName);
+            });
+
+            socket.on('text-update', (text) => {
+                document.getElementById('text-input').value = text;
+            });
+
+            socket.on('users-update', (users) => {
+                const usersList = document.getElementById('users-list');
+                usersList.innerHTML = users.map(user => `<div class="user-tag">${user}</div>`).join('');
+            });
+
+            const textInput = document.getElementById('text-input');
+            let typingTimer;
+
+            textInput.addEventListener('input', () => {
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(() => {
+                    socket.emit('text-change', { text: textInput.value });
+                }, 300);
+            });
+        }
+
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+    </script>
+</body>
+</html>

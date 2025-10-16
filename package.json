@@ -1,0 +1,51 @@
+{
+  "name": "cypress-parallel-browsers",
+  "version": "2.0.0",
+  "description": "Real-time collaborative text editor with parallel Cypress testing - demonstrating true simultaneous browser testing",
+  "main": "dist/server.js",
+  "scripts": {
+    "start": "ts-node src/server.ts",
+    "test": "ts-node src/run-dual-cypress.ts --video",
+    "demo": "ts-node src/server.ts & sleep 3 && ts-node src/run-dual-cypress.ts --video"
+  },
+  "keywords": [
+    "cypress",
+    "parallel-testing",
+    "e2e-testing",
+    "real-time",
+    "websocket",
+    "socket.io",
+    "typescript",
+    "multi-browser",
+    "test-automation",
+    "concurrent-testing",
+    "collaborative-editing"
+  ],
+  "author": "Bogdan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/cypress-parallel-browsers"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/cypress-parallel-browsers/issues"
+  },
+  "homepage": "https://github.com/yourusername/cypress-parallel-browsers#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.8.0",
+    "@types/socket.io": "^3.0.1",
+    "cypress": "^14.5.4",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
