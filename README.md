@@ -67,8 +67,6 @@ npm run demo
 
 ## Video Output
 Tests automatically record videos saved in `cypress/videos/`:
-- `alice-cypress.cy.ts.mp4` - Alice's browser session
-- `bob-cypress.cy.ts.mp4` - Bob's browser session
 - `dual-browsers-HD.mp4` - Both browsers side-by-side (if merged)
 
 ## Key Achievement
